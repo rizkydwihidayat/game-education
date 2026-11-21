@@ -47,11 +47,8 @@ export default function LoadingScreen({ onFinish }) {
       />
 
       {/* Top Badge: Positioned at the exact same location as Home Screen, BEHIND the overlay (z-10) */}
-      <div className="relative z-10 w-full flex flex-col items-center pointer-events-none">
-        <div className="h-10 sm:h-11 md:h-12 lg:h-13 pt-1" />
-        <div className="pt-14 sm:pt-16 md:pt-20 lg:pt-24">
-          <RibbonBadge />
-        </div>
+      <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center sm:justify-start pt-0 sm:pt-16 md:pt-20 lg:pt-24 -mt-10 sm:mt-0 pointer-events-none">
+        <RibbonBadge />
       </div>
 
       {/* Dark semi-transparent overlay (50%) in front of background and badge (z-20) */}

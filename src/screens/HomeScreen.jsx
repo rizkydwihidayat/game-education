@@ -147,8 +147,8 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
         </div>
       </header>
 
-      {/* Main Content: Placed in the open cloud/sky area with Start Button matching popup style */}
-      <main className="relative z-20 flex-1 flex flex-col items-center justify-start pt-14 sm:pt-16 md:pt-20 lg:pt-24 gap-3.5 sm:gap-5">
+      {/* Main Content: Centered on mobile for easy thumb reach, positioned in cloud area on sm+ */}
+      <main className="relative z-20 flex-1 flex flex-col items-center justify-center sm:justify-start pt-0 sm:pt-16 md:pt-20 lg:pt-24 -mt-10 sm:mt-0 gap-3.5 sm:gap-5">
         {/* Ribbon Badge */}
         <RibbonBadge />
 
