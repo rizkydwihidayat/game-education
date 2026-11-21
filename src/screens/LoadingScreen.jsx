@@ -40,25 +40,19 @@ export default function LoadingScreen({ onFinish }) {
 
   return (
     <div className="relative w-full h-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-hidden bg-slate-900">
-      {/* Background Illustration with clean open sky and clouds */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-500 z-0"
-        style={{ backgroundImage: `url('/images/bg-main.webp')` }}
-      />
+      {/* Background Illustration (Responsive: Portrait on mobile, Landscape on sm+) */}
+      <div className="absolute inset-0 bg-game-main transition-all duration-500 z-0 pointer-events-none" />
 
       {/* Top Badge: Positioned at the exact same location as Home Screen, BEHIND the overlay (z-10) */}
-      <div className="relative z-10 w-full flex flex-col items-center pointer-events-none">
-        <div className="h-10 sm:h-11 md:h-12 lg:h-13 pt-1" />
-        <div className="pt-2 sm:pt-4 md:pt-6 lg:pt-8">
-          <RibbonBadge />
-        </div>
+      <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-start pt-[12vh] sm:pt-16 md:pt-20 lg:pt-24 pointer-events-none">
+        <RibbonBadge />
       </div>
 
       {/* Dark semi-transparent overlay (50%) in front of background and badge (z-20) */}
       <div className="absolute inset-0 bg-black/50 pointer-events-none z-20" />
 
-      {/* Loading Progress Bar Container: In FRONT of the 50% dark overlay (z-30) */}
-      <div className="absolute bottom-10 sm:bottom-14 md:bottom-16 lg:bottom-20 left-1/2 -translate-x-1/2 w-[84%] max-w-sm sm:max-w-md md:max-w-lg z-30 flex flex-col items-center gap-2">
+      {/* Loading Progress Bar Container: Elevated on mobile for comfortable eye-level reading (z-30) */}
+      <div className="absolute bottom-[22vh] sm:bottom-28 md:bottom-32 lg:bottom-36 left-1/2 -translate-x-1/2 w-[84%] max-w-sm sm:max-w-md md:max-w-lg z-30 flex flex-col items-center gap-2">
         {/* Outer 3D Frame matching game UI style with 4px white border & 50% opacity shadow */}
         <div className="relative w-full h-9 sm:h-11 md:h-12 rounded-2xl sm:rounded-3xl border-3 sm:border-4 border-white bg-[#0f172a] shadow-[0_6px_0_rgba(0,0,0,0.5),0_10px_20px_rgba(0,0,0,0.4)] overflow-hidden p-1 flex items-center">
           

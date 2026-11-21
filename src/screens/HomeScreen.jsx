@@ -66,11 +66,8 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
 
   return (
     <div className="relative w-full h-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-hidden bg-slate-900">
-      {/* Background Graphic (Clean sky with clouds) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700"
-        style={{ backgroundImage: `url('/images/bg-main.webp')` }}
-      />
+      {/* Background Graphic (Responsive: Portrait on mobile, Landscape on sm+) */}
+      <div className="absolute inset-0 bg-game-main transition-all duration-700 pointer-events-none" />
       {/* Subtle overlay vignette */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10 pointer-events-none" />
 
@@ -147,8 +144,8 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
         </div>
       </header>
 
-      {/* Main Content: Placed in the open cloud/sky area with Start Button matching popup style */}
-      <main className="relative z-20 flex-1 flex flex-col items-center justify-start pt-2 sm:pt-4 md:pt-6 lg:pt-8 gap-3 sm:gap-4.5">
+      {/* Main Content: Positioned in open sky comfortably above characters on mobile and desktop */}
+      <main className="relative z-20 flex-1 flex flex-col items-center justify-start pt-[12vh] sm:pt-16 md:pt-20 lg:pt-24 gap-3.5 sm:gap-4.5">
         {/* Ribbon Badge */}
         <RibbonBadge />
 
@@ -193,21 +190,21 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
             </p>
           </div>
 
-          {/* Action Buttons in 3D Game Style */}
-          <div className="flex items-center gap-3 w-full pt-2">
-            <GameButton
-              variant="green"
-              onClick={() => setShowExitModal(false)}
-              className="flex-1 uppercase"
-            >
-              Batal
-            </GameButton>
+          {/* Action Buttons: Responsive vertical stack on mobile, horizontal on sm+ */}
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 w-full pt-2">
             <GameButton
               variant="red"
               onClick={handleConfirmExit}
-              className="flex-1 uppercase"
+              className="w-full sm:flex-1 uppercase order-1 sm:order-2"
             >
               Ya, Keluar
+            </GameButton>
+            <GameButton
+              variant="green"
+              onClick={() => setShowExitModal(false)}
+              className="w-full sm:flex-1 uppercase order-2 sm:order-1"
+            >
+              Batal
             </GameButton>
           </div>
         </div>

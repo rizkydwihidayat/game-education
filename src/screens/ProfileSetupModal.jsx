@@ -200,28 +200,28 @@ export default function ProfileSetupModal({
               </button>
             </div>
 
-            {/* Bottom Actions: Kembali & OK, Simpan (Equal 50/50 Width) */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-sm sm:max-w-md pt-2">
-              <GameButton
-                type="button"
-                variant="grey"
-                size="md"
-                onClick={handleBackStep}
-                icon={<ArrowLeft className="w-4 h-4 stroke-[3]" />}
-                className="w-full py-3 sm:py-3.5"
-              >
-                Kembali
-              </GameButton>
-
+            {/* Bottom Actions: Responsive (Vertical stack on mobile, 50/50 grid on sm+) */}
+            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-sm sm:max-w-md pt-2">
               <GameButton
                 type="button"
                 variant="teal"
                 size="md"
                 onClick={handleSaveAndStart}
                 icon={<Sparkles className="w-4 h-4 fill-white stroke-none" />}
-                className="w-full py-3 sm:py-3.5"
+                className="w-full py-2.5 sm:py-3.5 order-1 sm:order-2"
               >
                 OK, Simpan
+              </GameButton>
+
+              <GameButton
+                type="button"
+                variant="grey"
+                size="md"
+                onClick={handleBackStep}
+                icon={<ArrowLeft className="w-4 h-4 stroke-[3]" />}
+                className="w-full py-2.5 sm:py-3.5 order-2 sm:order-1"
+              >
+                Kembali
               </GameButton>
             </div>
           </div>

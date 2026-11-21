@@ -33,7 +33,7 @@ export default function GameButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`relative font-black border-white active:translate-y-1 hover:brightness-105 transition-all cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 select-none outline-none disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none ${variantStyles[variant] || variantStyles.gold} ${sizeStyles[size] || sizeStyles.md} ${className}`}
+      className={`relative font-black border-white active:translate-y-1 hover:brightness-105 transition-all cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 select-none outline-none whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none ${variantStyles[variant] || variantStyles.gold} ${sizeStyles[size] || sizeStyles.md} ${className}`}
       {...props}
     >
       {icon && <span className="shrink-0 flex items-center justify-center">{icon}</span>}

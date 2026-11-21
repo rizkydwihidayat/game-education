@@ -64,3 +64,18 @@
   background-size: 32px 32px;
   animation: progressStripes 0.9s linear infinite;
 }
+
+/* Responsive Main Game Background: Portrait on mobile, Landscape on sm+ */
+.bg-game-main {
+  background-image: url('/images/bg-main-mobile.webp');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 640px) {
+  .bg-game-main {
+    background-image: url('/images/bg-main.webp');
+    background-position: center;
+  }
+}
