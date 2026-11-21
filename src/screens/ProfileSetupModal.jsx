@@ -137,13 +137,13 @@ export default function ProfileSetupModal({
                 onClick={() => handleSelectGender('boy')}
                 className={`relative flex flex-col items-center justify-between p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl transition-all duration-200 cursor-pointer outline-none select-none ${
                   gender === 'boy'
-                    ? 'bg-gradient-to-b from-[#e59840] via-[#c6731d] to-[#9a4b08] border-3 sm:border-4 border-amber-300 ring-4 ring-amber-400 shadow-[0_6px_0_#381403,0_10px_20px_rgba(0,0,0,0.35)] scale-105'
+                    ? 'bg-gradient-to-b from-[#e59840] via-[#c6731d] to-[#9a4b08] border-3 sm:border-4 border-emerald-300 ring-4 ring-emerald-400 shadow-[0_6px_0_#381403,0_10px_20px_rgba(0,0,0,0.35)] scale-105'
                     : 'bg-gradient-to-b from-[#b45d13] to-[#6e330a] border-2 sm:border-3 border-amber-200/50 opacity-80 hover:opacity-100 hover:scale-[1.02] shadow-[0_4px_0_#381403]'
                 }`}
               >
                 {/* Active Checkmark Badge */}
                 {gender === 'boy' && (
-                  <div className="absolute -top-2.5 -right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-400 border-2 sm:border-3 border-white text-slate-900 flex items-center justify-center shadow-md animate-scale-up z-10">
+                  <div className="absolute -top-2.5 -right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-b from-[#2dd4bf] via-[#0d9488] to-[#047857] border-2 sm:border-3 border-white text-white flex items-center justify-center shadow-md animate-scale-up z-10">
                     <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-[4]" />
                   </div>
                 )}
@@ -171,13 +171,13 @@ export default function ProfileSetupModal({
                 onClick={() => handleSelectGender('girl')}
                 className={`relative flex flex-col items-center justify-between p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl transition-all duration-200 cursor-pointer outline-none select-none ${
                   gender === 'girl'
-                    ? 'bg-gradient-to-b from-[#e59840] via-[#c6731d] to-[#9a4b08] border-3 sm:border-4 border-amber-300 ring-4 ring-amber-400 shadow-[0_6px_0_#381403,0_10px_20px_rgba(0,0,0,0.35)] scale-105'
+                    ? 'bg-gradient-to-b from-[#e59840] via-[#c6731d] to-[#9a4b08] border-3 sm:border-4 border-emerald-300 ring-4 ring-emerald-400 shadow-[0_6px_0_#381403,0_10px_20px_rgba(0,0,0,0.35)] scale-105'
                     : 'bg-gradient-to-b from-[#b45d13] to-[#6e330a] border-2 sm:border-3 border-amber-200/50 opacity-80 hover:opacity-100 hover:scale-[1.02] shadow-[0_4px_0_#381403]'
                 }`}
               >
                 {/* Active Checkmark Badge */}
                 {gender === 'girl' && (
-                  <div className="absolute -top-2.5 -right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-400 border-2 sm:border-3 border-white text-slate-900 flex items-center justify-center shadow-md animate-scale-up z-10">
+                  <div className="absolute -top-2.5 -right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-b from-[#2dd4bf] via-[#0d9488] to-[#047857] border-2 sm:border-3 border-white text-white flex items-center justify-center shadow-md animate-scale-up z-10">
                     <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-[4]" />
                   </div>
                 )}
@@ -215,7 +215,7 @@ export default function ProfileSetupModal({
 
               <GameButton
                 type="button"
-                variant="grey"
+                variant="black"
                 size="md"
                 onClick={handleBackStep}
                 icon={<ArrowLeft className="w-4 h-4 stroke-[3]" />}

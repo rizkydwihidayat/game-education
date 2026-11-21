@@ -5,29 +5,65 @@ class AudioManager {
     this.bgm = null;
     this.sfx = {};
     this.isMuted = false;
-    this.isBgmPlaying = false;
+    this.shouldPlayBgm = true;
     this.synthCtx = null;
-    this.unlocked = false;
 
-    // Automatic audio unlock listener on first user interaction (critical for mobile iOS/Android)
     if (typeof window !== 'undefined') {
-      const unlockAudio = () => {
+      this.init();
+
+      const resumeAndPlayBGM = () => {
+        // Resume Web Audio context if suspended
         if (Howler.ctx && Howler.ctx.state === 'suspended') {
-          Howler.ctx.resume();
+          Howler.ctx.resume().catch(() => {});
         }
-        if (!this.isMuted && !this.isBgmPlaying && this.bgm) {
-          try {
-            this.bgm.play();
-            this.isBgmPlaying = true;
-          } catch (e) {
-            // ignore
+        if (this.synthCtx && this.synthCtx.state === 'suspended') {
+          this.synthCtx.resume().catch(() => {});
+        }
+
+        // Resume BGM if needed and not already actively playing
+        if (!this.isMuted && this.shouldPlayBgm && this.bgm) {
+          if (!this.bgm.playing()) {
+            try {
+              this.bgm.play();
+            } catch (e) {
+              // ignore
+            }
           }
         }
       };
 
-      window.addEventListener('click', unlockAudio, { passive: true });
-      window.addEventListener('touchstart', unlockAudio, { passive: true });
-      window.addEventListener('keydown', unlockAudio, { passive: true });
+      // 1. Automatic audio unlock & resume on any user interaction
+      const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'];
+      events.forEach((evt) => {
+        window.addEventListener(evt, resumeAndPlayBGM, { passive: true });
+      });
+
+      // 2. Handle tab/browser visibility changes (e.g. minimizing app, switching tabs, returning)
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          this.shouldPlayBgm = !this.isMuted;
+          resumeAndPlayBGM();
+        } else {
+          // Pause when tab/screen is hidden to conserve device battery
+          if (this.bgm && this.bgm.playing()) {
+            try {
+              this.bgm.pause();
+            } catch (e) {}
+          }
+        }
+      });
+
+      // 3. Handle Back-Forward Cache (bfcache) restoration when returning to the game
+      window.addEventListener('pageshow', () => {
+        this.shouldPlayBgm = !this.isMuted;
+        resumeAndPlayBGM();
+      });
+
+      // 4. Handle window focus restoration
+      window.addEventListener('focus', () => {
+        this.shouldPlayBgm = !this.isMuted;
+        resumeAndPlayBGM();
+      });
     }
   }
 
@@ -37,26 +73,18 @@ class AudioManager {
     // Support both MP3 and WebM for 100% cross-platform compatibility (iOS Safari & Android Chrome)
     this.bgm = new Howl({
       src: ['/audio/bgm.mp3', '/audio/bgm.webm'],
+      html5: true, // Stream audio via HTML5 Audio - zero decode delay, never blocks main thread on reload
       loop: true,
       volume: 0.45,
       autoplay: false,
       preload: true,
-      onplay: () => {
-        this.isBgmPlaying = true;
-      },
-      onpause: () => {
-        this.isBgmPlaying = false;
-      },
-      onstop: () => {
-        this.isBgmPlaying = false;
-      },
       onloaderror: (id, err) => {
         console.warn('BGM load error:', err);
       },
     });
 
     const sfxList = ['alarm', 'correct', 'false'];
-    sfxList.forEach(name => {
+    sfxList.forEach((name) => {
       this.sfx[name] = new Howl({
         src: [`/audio/${name}.mp3`, `/audio/${name}.webm`],
         volume: 0.8,
@@ -67,13 +95,14 @@ class AudioManager {
 
   playBGM() {
     this.init();
+    this.shouldPlayBgm = true;
     if (this.isMuted) return;
 
     if (Howler.ctx && Howler.ctx.state === 'suspended') {
-      Howler.ctx.resume();
+      Howler.ctx.resume().catch(() => {});
     }
 
-    if (!this.isBgmPlaying && this.bgm) {
+    if (this.bgm && !this.bgm.playing()) {
       try {
         this.bgm.play();
       } catch (err) {
@@ -83,9 +112,11 @@ class AudioManager {
   }
 
   pauseBGM() {
-    if (this.bgm && this.isBgmPlaying) {
-      this.bgm.pause();
-      this.isBgmPlaying = false;
+    this.shouldPlayBgm = false;
+    if (this.bgm && this.bgm.playing()) {
+      try {
+        this.bgm.pause();
+      } catch (e) {}
     }
   }
 
@@ -95,8 +126,10 @@ class AudioManager {
     Howler.mute(this.isMuted);
 
     if (!this.isMuted) {
+      this.shouldPlayBgm = true;
       this.playBGM();
     } else {
+      this.shouldPlayBgm = false;
       this.pauseBGM();
     }
     return this.isMuted;
@@ -110,7 +143,7 @@ class AudioManager {
         this.synthCtx = new AudioCtx();
       }
       if (this.synthCtx.state === 'suspended') {
-        this.synthCtx.resume();
+        this.synthCtx.resume().catch(() => {});
       }
       const now = this.synthCtx.currentTime;
       const osc = this.synthCtx.createOscillator();

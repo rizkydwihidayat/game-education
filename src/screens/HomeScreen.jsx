@@ -18,10 +18,18 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
     // Load saved player profile if exists
     const saved = getPlayerProfile();
     if (saved) setPlayerProfile(saved);
-  }, []);
+
+    // Ensure BGM plays when on Home Screen if unmuted
+    if (!isMuted) {
+      soundManager.playBGM();
+    }
+  }, [isMuted]);
 
   const handleMulaiClick = () => {
     soundManager.playSFX('correct');
+    if (!isMuted) {
+      soundManager.playBGM();
+    }
     if (playerProfile) {
       if (onStartGame) onStartGame(playerProfile);
     } else {
@@ -56,6 +64,7 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
 
   const handleConfirmExit = () => {
     soundManager.playSFX('back');
+    soundManager.pauseBGM();
     setShowExitModal(false);
     if (window.history.length > 1) {
       window.history.back();
@@ -240,8 +249,11 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
 
           {/* Close Action Button */}
           <GameButton
-            variant="gold"
-            onClick={() => setShowInfoModal(false)}
+            variant="teal"
+            onClick={() => {
+              soundManager.playSFX('correct');
+              setShowInfoModal(false);
+            }}
             className="w-full mt-1 uppercase"
           >
             Mengerti &amp; Mulai
