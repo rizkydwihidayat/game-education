@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Balsamiq Sans', cursive, sans-serif;
+  --font-body: 'Balsamiq Sans', cursive, sans-serif;
+}
+
+@layer base {
+  *, ::before, ::after {
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    touch-action: manipulation;
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+  }
+
+  button, input, optgroup, select, textarea {
+    font-family: 'Balsamiq Sans', cursive, sans-serif;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-up {
+  animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes progressStripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 32px 0;
+  }
+}
+
+.animate-progress-stripes {
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.18) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 32px 32px;
+  animation: progressStripes 0.9s linear infinite;
+}
