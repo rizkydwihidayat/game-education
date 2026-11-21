@@ -124,14 +124,25 @@ export default function MainMenuScreen({
   };
 
   return (
-    <div className="relative w-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-x-hidden bg-slate-900">
-      {/* Background Graphic (Outdoor Sunny Hills from User Upload) */}
+    <div className="relative w-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-x-hidden">
+      {/* Background Graphic: Fixed GPU-accelerated layer without resize transition glitches */}
       <div
-        className="fixed inset-0 bg-cover bg-center transition-all duration-700"
-        style={{ backgroundImage: `url('/images/bg-pilih-misi.webp')` }}
-      />
-      {/* Soft Vignette Overlay for focus & readability */}
-      <div className="fixed inset-0 bg-black/15 pointer-events-none" />
+        className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+        style={{
+          transform: 'translate3d(0, 0, 0)',
+          WebkitTransform: 'translate3d(0, 0, 0)',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+        }}
+      >
+        <img
+          src="/images/bg-pilih-misi.webp"
+          alt="Pilih Misi Background"
+          className="w-full h-full object-cover object-center pointer-events-none select-none"
+        />
+        {/* Soft Vignette Overlay for focus & readability */}
+        <div className="absolute inset-0 bg-black/15 pointer-events-none" />
+      </div>
 
       {/* TOP HEADER BAR */}
       <header className="relative z-30 w-full flex items-center justify-between pt-1 gap-2">

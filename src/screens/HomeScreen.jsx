@@ -240,8 +240,11 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
 
           {/* Close Action Button */}
           <GameButton
-            variant="gold"
-            onClick={() => setShowInfoModal(false)}
+            variant="teal"
+            onClick={() => {
+              soundManager.playSFX('correct');
+              setShowInfoModal(false);
+            }}
             className="w-full mt-1 uppercase"
           >
             Mengerti &amp; Mulai
