@@ -7,32 +7,78 @@ class AudioManager {
     this.isMuted = false;
     this.isBgmPlaying = false;
     this.synthCtx = null;
+    this.unlocked = false;
+
+    // Automatic audio unlock listener on first user interaction (critical for mobile iOS/Android)
+    if (typeof window !== 'undefined') {
+      const unlockAudio = () => {
+        if (Howler.ctx && Howler.ctx.state === 'suspended') {
+          Howler.ctx.resume();
+        }
+        if (!this.isMuted && !this.isBgmPlaying && this.bgm) {
+          try {
+            this.bgm.play();
+            this.isBgmPlaying = true;
+          } catch (e) {
+            // ignore
+          }
+        }
+      };
+
+      window.addEventListener('click', unlockAudio, { passive: true });
+      window.addEventListener('touchstart', unlockAudio, { passive: true });
+      window.addEventListener('keydown', unlockAudio, { passive: true });
+    }
   }
 
   init() {
     if (this.bgm) return;
 
+    // Support both MP3 and WebM for 100% cross-platform compatibility (iOS Safari & Android Chrome)
     this.bgm = new Howl({
-      src: ['/audio/bgm.webm'],
+      src: ['/audio/bgm.mp3', '/audio/bgm.webm'],
       loop: true,
-      volume: 0.5,
-      html5: true, // HTML5 Audio for large streaming audio
+      volume: 0.45,
+      autoplay: false,
+      preload: true,
+      onplay: () => {
+        this.isBgmPlaying = true;
+      },
+      onpause: () => {
+        this.isBgmPlaying = false;
+      },
+      onstop: () => {
+        this.isBgmPlaying = false;
+      },
+      onloaderror: (id, err) => {
+        console.warn('BGM load error:', err);
+      },
     });
 
     const sfxList = ['alarm', 'correct', 'false'];
     sfxList.forEach(name => {
       this.sfx[name] = new Howl({
-        src: [`/audio/${name}.webm`],
+        src: [`/audio/${name}.mp3`, `/audio/${name}.webm`],
         volume: 0.8,
+        preload: true,
       });
     });
   }
 
   playBGM() {
     this.init();
-    if (!this.isBgmPlaying && !this.isMuted) {
-      this.bgm.play();
-      this.isBgmPlaying = true;
+    if (this.isMuted) return;
+
+    if (Howler.ctx && Howler.ctx.state === 'suspended') {
+      Howler.ctx.resume();
+    }
+
+    if (!this.isBgmPlaying && this.bgm) {
+      try {
+        this.bgm.play();
+      } catch (err) {
+        console.warn('Autoplay blocked, will start on first touch:', err);
+      }
     }
   }
 
@@ -47,10 +93,11 @@ class AudioManager {
     this.init();
     this.isMuted = !this.isMuted;
     Howler.mute(this.isMuted);
-    
-    // If unmuting and bgm wasn't started, start it
-    if (!this.isMuted && !this.isBgmPlaying) {
+
+    if (!this.isMuted) {
       this.playBGM();
+    } else {
+      this.pauseBGM();
     }
     return this.isMuted;
   }

@@ -292,8 +292,19 @@ export default function MainMenuScreen({
               </p>
             </div>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-sm pt-2">
+            {/* Action Buttons: Responsive vertical stack on mobile, 50/50 grid on sm+ */}
+            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-sm pt-2">
+              <GameButton
+                type="button"
+                variant="teal"
+                size="md"
+                onClick={handleStartMissionClick}
+                icon={<Play className="w-4 h-4 fill-white stroke-none" />}
+                className="w-full py-2.5 sm:py-3 order-1 sm:order-2"
+              >
+                Mulai Misi
+              </GameButton>
+
               <GameButton
                 type="button"
                 variant="grey"
@@ -302,20 +313,9 @@ export default function MainMenuScreen({
                   soundManager.playSFX('back');
                   setSelectedActivity(null);
                 }}
-                className="w-full py-2.5 sm:py-3"
+                className="w-full py-2.5 sm:py-3 order-2 sm:order-1"
               >
                 Batal
-              </GameButton>
-
-              <GameButton
-                type="button"
-                variant="teal"
-                size="md"
-                onClick={handleStartMissionClick}
-                icon={<Play className="w-4 h-4 fill-white stroke-none" />}
-                className="w-full py-2.5 sm:py-3"
-              >
-                Mulai Misi
               </GameButton>
             </div>
           </div>
