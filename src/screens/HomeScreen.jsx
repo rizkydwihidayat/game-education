@@ -66,11 +66,8 @@ export default function HomeScreen({ onStartGame, isMuted, onToggleMute }) {
 
   return (
     <div className="relative w-full h-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-hidden bg-slate-900">
-      {/* Background Graphic (Clean sky with clouds) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-700"
-        style={{ backgroundImage: `url('/images/bg-main.webp')` }}
-      />
+      {/* Background Graphic (Responsive: Portrait on mobile, Landscape on sm+) */}
+      <div className="absolute inset-0 bg-game-main transition-all duration-700 pointer-events-none" />
       {/* Subtle overlay vignette */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10 pointer-events-none" />
 

@@ -40,11 +40,8 @@ export default function LoadingScreen({ onFinish }) {
 
   return (
     <div className="relative w-full h-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-hidden bg-slate-900">
-      {/* Background Illustration with clean open sky and clouds */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-500 z-0"
-        style={{ backgroundImage: `url('/images/bg-main.webp')` }}
-      />
+      {/* Background Illustration (Responsive: Portrait on mobile, Landscape on sm+) */}
+      <div className="absolute inset-0 bg-game-main transition-all duration-500 z-0 pointer-events-none" />
 
       {/* Top Badge: Positioned at the exact same location as Home Screen, BEHIND the overlay (z-10) */}
       <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-start pt-[12vh] sm:pt-16 md:pt-20 lg:pt-24 pointer-events-none">
