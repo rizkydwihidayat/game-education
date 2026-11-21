@@ -215,7 +215,7 @@ export default function ProfileSetupModal({
 
               <GameButton
                 type="button"
-                variant="grey"
+                variant="black"
                 size="md"
                 onClick={handleBackStep}
                 icon={<ArrowLeft className="w-4 h-4 stroke-[3]" />}
