@@ -73,6 +73,7 @@ class AudioManager {
     // Support both MP3 and WebM for 100% cross-platform compatibility (iOS Safari & Android Chrome)
     this.bgm = new Howl({
       src: ['/audio/bgm.mp3', '/audio/bgm.webm'],
+      html5: true, // Stream audio via HTML5 Audio - zero decode delay, never blocks main thread on reload
       loop: true,
       volume: 0.45,
       autoplay: false,

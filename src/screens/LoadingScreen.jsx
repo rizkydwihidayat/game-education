@@ -1,47 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import RibbonBadge from '../components/RibbonBadge';
 
 export default function LoadingScreen({ onFinish }) {
-  const [progress, setProgress] = useState(0);
+  const progressBarRef = useRef(null);
+  const progressTextRef = useRef(null);
 
   useEffect(() => {
-    // 60fps silky smooth progress animation using requestAnimationFrame
     let animationFrameId;
     let startTime = null;
-    const duration = 2000; // 2 seconds total loading duration
+    let finishTimeout = null;
+    const duration = 1800; // 1.8s silky smooth loading duration
 
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
       const fraction = Math.min(1, elapsed / duration);
-      // Gentle ease-out curve for natural deceleration
-      const eased = Math.pow(fraction, 0.9) * 100;
 
-      setProgress(Math.min(100, eased));
+      // Natural game loading ease-out curve (responsive early start, gentle settle)
+      const eased = 1 - Math.pow(1 - fraction, 2.2);
+      const currentPercent = Math.min(100, Math.max(0, eased * 100));
+      const rounded = Math.round(currentPercent);
+
+      // Direct lock-step DOM updates (prevents React state batching and CSS transition lag)
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${currentPercent}%`;
+      }
+      if (progressTextRef.current) {
+        progressTextRef.current.textContent = `${rounded}%`;
+      }
 
       if (fraction < 1) {
         animationFrameId = requestAnimationFrame(step);
+      } else {
+        // Automatically transition to home screen after reaching 100%
+        finishTimeout = setTimeout(() => {
+          if (onFinish) onFinish();
+        }, 200);
       }
     };
 
     animationFrameId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
 
-  // When loading reaches 100%, automatically transition to home screen after brief pause
-  useEffect(() => {
-    if (progress >= 100) {
-      const timer = setTimeout(() => {
-        if (onFinish) onFinish();
-      }, 250);
-      return () => clearTimeout(timer);
-    }
-  }, [progress, onFinish]);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (finishTimeout) clearTimeout(finishTimeout);
+    };
+  }, [onFinish]);
 
   return (
     <div className="relative w-full h-full min-h-screen flex flex-col justify-between p-3 sm:p-5 select-none overflow-hidden bg-slate-900">
       {/* Background Illustration (Responsive: Portrait on mobile, Landscape on sm+) */}
-      <div className="absolute inset-0 bg-game-main transition-all duration-500 z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-game-main z-0 pointer-events-none" />
 
       {/* Top Badge: Positioned at the exact same location as Home Screen, BEHIND the overlay (z-10) */}
       <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-start pt-[12vh] sm:pt-16 md:pt-20 lg:pt-24 pointer-events-none">
@@ -58,8 +67,9 @@ export default function LoadingScreen({ onFinish }) {
           
           {/* Inner Smooth Progress Bar with cartoon green gradient & animated stripes */}
           <div
-            className="relative h-full rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] transition-[width] duration-75 ease-out flex items-center overflow-hidden"
-            style={{ width: `${progress}%` }}
+            ref={progressBarRef}
+            className="relative h-full rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] flex items-center overflow-hidden"
+            style={{ width: '0%' }}
           >
             {/* Animated Candy Stripes */}
             <div className="absolute inset-0 animate-progress-stripes opacity-90" />
@@ -71,13 +81,14 @@ export default function LoadingScreen({ onFinish }) {
             <div className="absolute right-0 top-0 bottom-0 w-2.5 bg-white/70 blur-[1px] rounded-r-full" />
           </div>
 
-          {/* Centered Percentage Text in Balsamiq Sans */}
+          {/* Centered Percentage Text in Balsamiq Sans (Directly synchronized with progress bar) */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <span
+              ref={progressTextRef}
               className="text-xs sm:text-sm font-black text-white tracking-widest drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]"
               style={{ fontFamily: "'Balsamiq Sans', cursive, sans-serif" }}
             >
-              {Math.round(progress)}%
+              0%
             </span>
           </div>
         </div>
